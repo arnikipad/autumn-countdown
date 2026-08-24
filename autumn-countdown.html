@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Autumn Countdown</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    background:
+        radial-gradient(circle at top, #40230d, #160b04 60%, #080402);
+    color: white;
+}
+
+.container {
+    width: min(900px, 92vw);
+    padding: 45px 30px;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,.15);
+    border-radius: 25px;
+    background: rgba(20, 10, 5, .72);
+    box-shadow: 0 0 50px rgba(255, 120, 20, .18);
+    backdrop-filter: blur(8px);
+    z-index: 5;
+}
+
+h1 {
+    margin: 0;
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    letter-spacing: 5px;
+}
+
+.subtitle {
+    margin: 12px 0 35px;
+    opacity: .8;
+    font-size: 1.1rem;
+}
+
+/* Loading screen */
+
+#loadingScreen {
+    display: block;
+}
+
+.progress {
+    width: 100%;
+    height: 25px;
+    border-radius: 50px;
+    overflow: hidden;
+    background: rgba(255,255,255,.12);
+    margin: 25px 0 15px;
+}
+
+.progressBar {
+    width: 0%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #ff6a00, #ffb300, #e53935);
+    transition: width .08s linear;
+    box-shadow: 0 0 20px rgba(255,130,20,.7);
+}
+
+#loadingText {
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+/* Countdown */
+
+#countdownScreen {
+    display: none;
+}
+
+.date {
+    font-size: 1.5rem;
+    margin-bottom: 25px;
+}
+
+.countdown {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.unit {
+    padding: 20px 10px;
+    border-radius: 18px;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.12);
+}
+
+.number {
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: bold;
+}
+
+.label {
+    margin-top: 5px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: .65;
+}
+
+/* Leaves */
+
+.leaf {
+    position: fixed;
+    top: -80px;
+    z-index: 2;
+    pointer-events: none;
+    user-select: none;
+    animation: fall linear forwards;
+    filter: drop-shadow(0 5px 5px rgba(0,0,0,.4));
+}
+
+@keyframes fall {
+    0% {
+        transform:
+            translateY(-80px)
+            translateX(0)
+            rotate(0deg);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    50% {
+        transform:
+            translateY(55vh)
+            translateX(80px)
+            rotate(180deg);
+    }
+
+    100% {
+        transform:
+            translateY(115vh)
+            translateX(-100px)
+            rotate(360deg);
+        opacity: .2;
+    }
+}
+
+/* Arrival */
+
+#arrival {
+    display: none;
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: bold;
+    animation: pulse 1.5s infinite alternate;
+}
+
+@keyframes pulse {
+    from {
+        transform: scale(1);
+        opacity: .75;
+    }
+
+    to {
+        transform: scale(1.05);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 600px) {
+    .countdown {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .container {
+        padding: 35px 20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Loading -->
+    <section id="loadingScreen">
+
+        <h1>🍂 AUTUMN</h1>
+
+        <div class="subtitle">
+            Preparing the Autumn experience...
+        </div>
+
+        <div class="progress">
+            <div id="progressBar" class="progressBar"></div>
+        </div>
+
+        <div id="loadingText">
+            Loading 0%
+        </div>
+
+    </section>
+
+
+    <!-- Countdown -->
+    <section id="countdownScreen">
+
+        <h1>🍁 AUTUMN COUNTDOWN</h1>
+
+        <div class="subtitle">
+            The Autumn release is approaching
+        </div>
+
+        <div class="date">
+            September 23, 2026
+        </div>
+
+        <div class="countdown">
+
+            <div class="unit">
+                <div id="days" class="number">00</div>
+                <div class="label">Days</div>
+            </div>
+
+            <div class="unit">
+                <div id="hours" class="number">00</div>
+                <div class="label">Hours</div>
+            </div>
+
+            <div class="unit">
+                <div id="minutes" class="number">00</div>
+                <div class="label">Minutes</div>
+            </div>
+
+            <div class="unit">
+                <div id="seconds" class="number">00</div>
+                <div class="label">Seconds</div>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Arrival -->
+    <div id="arrival">
+        🍂 AUTUMN HAS ARRIVED! 🍁
+    </div>
+
+</div>
+
+
+<script>
+
+const progressBar = document.getElementById("progressBar");
+const loadingText = document.getElementById("loadingText");
+
+const loadingScreen = document.getElementById("loadingScreen");
+const countdownScreen = document.getElementById("countdownScreen");
+const arrival = document.getElementById("arrival");
+
+
+// -------------------------
+// Loading 0% → 100%
+// -------------------------
+
+let progress = 0;
+
+const loading = setInterval(() => {
+
+    progress++;
+
+    progressBar.style.width = progress + "%";
+    loadingText.textContent = "Loading " + progress + "%";
+
+    if (progress >= 100) {
+
+        clearInterval(loading);
+
+        setTimeout(() => {
+
+            loadingScreen.style.display = "none";
+            countdownScreen.style.display = "block";
+
+        }, 700);
+    }
+
+}, 35);
+
+
+// -------------------------
+// September 1 Countdown
+// -------------------------
+
+const targetDate = new Date("September 1, 2026 00:00:00").getTime();
+
+function updateCountdown() {
+
+    const now = new Date().getTime();
+
+    let distance = targetDate - now;
+
+    if (distance <= 0) {
+
+        countdownScreen.style.display = "none";
+        arrival.style.display = "block";
+
+        return;
+    }
+
+    const days = Math.floor(
+        distance / (1000 * 60 * 60 * 24)
+    );
+
+    const hours = Math.floor(
+        (distance % (1000 * 60 * 60 * 24)) /
+        (1000 * 60 * 60)
+    );
+
+    const minutes = Math.floor(
+        (distance % (1000 * 60 * 60)) /
+        (1000 * 60)
+    );
+
+    const seconds = Math.floor(
+        (distance % (1000 * 60)) /
+        1000
+    );
+
+    document.getElementById("days").textContent =
+        String(days).padStart(2, "0");
+
+    document.getElementById("hours").textContent =
+        String(hours).padStart(2, "0");
+
+    document.getElementById("minutes").textContent =
+        String(minutes).padStart(2, "0");
+
+    document.getElementById("seconds").textContent =
+        String(seconds).padStart(2, "0");
+}
+
+updateCountdown();
+
+setInterval(updateCountdown, 1000);
+
+
+// -------------------------
+// Falling Autumn Leaves
+// -------------------------
+
+const leaves = ["🍂", "🍁", "🍃"];
+
+function createLeaf() {
+
+    const leaf = document.createElement("div");
+
+    leaf.className = "leaf";
+
+    leaf.textContent =
+        leaves[Math.floor(Math.random() * leaves.length)];
+
+    leaf.style.left =
+        Math.random() * 100 + "vw";
+
+    leaf.style.fontSize =
+        (18 + Math.random() * 28) + "px";
+
+    leaf.style.animationDuration =
+        (5 + Math.random() * 7) + "s";
+
+    leaf.style.animationDelay =
+        (Math.random() * 2) + "s";
+
+    document.body.appendChild(leaf);
+
+    setTimeout(() => {
+        leaf.remove();
+    }, 14000);
+}
+
+setInterval(createLeaf, 300);
+
+</script>
+
+</body>
+</html>
