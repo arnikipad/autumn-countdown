@@ -3,393 +3,51 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Autumn Countdown</title>
-
+<title>Realistic Autumn Countdown</title>
 <style>
-* {
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    min-height: 100vh;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-family: Arial, sans-serif;
-    background:
-        radial-gradient(circle at top, #40230d, #160b04 60%, #080402);
-    color: white;
-}
-
-.container {
-    width: min(900px, 92vw);
-    padding: 45px 30px;
-    text-align: center;
-    border: 1px solid rgba(255,255,255,.15);
-    border-radius: 25px;
-    background: rgba(20, 10, 5, .72);
-    box-shadow: 0 0 50px rgba(255, 120, 20, .18);
-    backdrop-filter: blur(8px);
-    z-index: 5;
-}
-
-h1 {
-    margin: 0;
-    font-size: clamp(2.5rem, 7vw, 5rem);
-    letter-spacing: 5px;
-}
-
-.subtitle {
-    margin: 12px 0 35px;
-    opacity: .8;
-    font-size: 1.1rem;
-}
-
-/* Loading screen */
-
-#loadingScreen {
-    display: block;
-}
-
-.progress {
-    width: 100%;
-    height: 25px;
-    border-radius: 50px;
-    overflow: hidden;
-    background: rgba(255,255,255,.12);
-    margin: 25px 0 15px;
-}
-
-.progressBar {
-    width: 0%;
-    height: 100%;
-    border-radius: inherit;
-    background: linear-gradient(90deg, #ff6a00, #ffb300, #e53935);
-    transition: width .08s linear;
-    box-shadow: 0 0 20px rgba(255,130,20,.7);
-}
-
-#loadingText {
-    font-size: 1.3rem;
-    font-weight: bold;
-}
-
-/* Countdown */
-
-#countdownScreen {
-    display: none;
-}
-
-.date {
-    font-size: 1.5rem;
-    margin-bottom: 25px;
-}
-
-.countdown {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 15px;
-}
-
-.unit {
-    padding: 20px 10px;
-    border-radius: 18px;
-    background: rgba(255,255,255,.08);
-    border: 1px solid rgba(255,255,255,.12);
-}
-
-.number {
-    font-size: clamp(2rem, 6vw, 4rem);
-    font-weight: bold;
-}
-
-.label {
-    margin-top: 5px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    opacity: .65;
-}
-
-/* Leaves */
-
-.leaf {
-    position: fixed;
-    top: -80px;
-    z-index: 2;
-    pointer-events: none;
-    user-select: none;
-    animation: fall linear forwards;
-    filter: drop-shadow(0 5px 5px rgba(0,0,0,.4));
-}
-
-@keyframes fall {
-    0% {
-        transform:
-            translateY(-80px)
-            translateX(0)
-            rotate(0deg);
-        opacity: 0;
-    }
-
-    10% {
-        opacity: 1;
-    }
-
-    50% {
-        transform:
-            translateY(55vh)
-            translateX(80px)
-            rotate(180deg);
-    }
-
-    100% {
-        transform:
-            translateY(115vh)
-            translateX(-100px)
-            rotate(360deg);
-        opacity: .2;
-    }
-}
-
-/* Arrival */
-
-#arrival {
-    display: none;
-    font-size: clamp(2rem, 6vw, 4rem);
-    font-weight: bold;
-    animation: pulse 1.5s infinite alternate;
-}
-
-@keyframes pulse {
-    from {
-        transform: scale(1);
-        opacity: .75;
-    }
-
-    to {
-        transform: scale(1.05);
-        opacity: 1;
-    }
-}
-
-@media (max-width: 600px) {
-    .countdown {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .container {
-        padding: 35px 20px;
-    }
-}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;overflow-x:hidden;font-family:Arial,sans-serif;color:#fff;background:radial-gradient(circle at 50% 0,rgba(255,185,85,.2),transparent 35%),linear-gradient(180deg,#6c3514,#2a1308 52%,#090503);transition:background 1.5s}body.night{background:radial-gradient(circle at 70% 10%,rgba(170,190,255,.12),transparent 30%),linear-gradient(180deg,#17121d,#100a10 55%,#040304)}#sunGlow{position:fixed;width:420px;height:420px;border-radius:50%;top:-230px;left:50%;transform:translateX(-50%);background:radial-gradient(circle,rgba(255,220,120,.9),rgba(255,157,50,.25) 35%,transparent 70%);filter:blur(15px);pointer-events:none;z-index:0;transition:opacity 1.5s}body.night #sunGlow{opacity:.08}.container{position:relative;z-index:10;width:min(1100px,92vw);margin:35px auto;padding:42px 30px;text-align:center;border:1px solid rgba(255,255,255,.14);border-radius:28px;background:rgba(18,9,4,.68);box-shadow:0 0 70px rgba(255,120,20,.16);backdrop-filter:blur(12px)}h1{margin:0;font-size:clamp(2.4rem,7vw,5.2rem);letter-spacing:5px}.subtitle{margin:12px 0 25px;opacity:.8}.progress{width:100%;height:25px;border-radius:50px;overflow:hidden;background:rgba(255,255,255,.12);margin:25px 0 15px}.progressBar{width:0;height:100%;background:linear-gradient(90deg,#ff6a00,#ffb300,#e53935);transition:width .08s}#loadingText{font-size:1.2rem;font-weight:bold}#countdownScreen{display:none}.date{margin-bottom:24px;font-size:1.35rem}.countdown,.infoGrid{display:grid;gap:15px}.countdown{grid-template-columns:repeat(4,1fr)}.infoGrid{grid-template-columns:repeat(3,1fr);margin-top:25px}.unit,.infoCard,.musicBox{border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.07);border-radius:18px}.unit{padding:20px 10px}.number{font-size:clamp(2rem,6vw,4rem);font-weight:bold}.label,.infoTitle{margin-top:5px;text-transform:uppercase;letter-spacing:2px;opacity:.62;font-size:.75rem}.infoCard{min-height:118px;padding:18px 12px;display:flex;flex-direction:column;justify-content:center}.infoIcon{font-size:1.9rem;margin-bottom:8px}.infoValue{margin-top:7px;font-size:1rem;font-weight:bold;word-break:break-word}.musicBox{margin-top:20px;padding:16px}.musicBox p{margin:0 0 10px}audio{width:min(520px,100%)}.credits{margin-top:25px;padding-top:20px;border-top:1px solid rgba(255,255,255,.12)}.creditLine{font-size:.75rem;letter-spacing:2px;opacity:.55}.updatedBy{margin-top:8px;font-size:.95rem;opacity:.8}.updatedBy strong{color:#ff9d32;text-shadow:0 0 15px rgba(255,157,50,.5)}.leaf,.rainDrop,.snowflake{position:fixed;pointer-events:none;user-select:none;z-index:4}.leaf{top:-80px;filter:drop-shadow(0 5px 5px rgba(0,0,0,.4));animation:fall linear forwards}@keyframes fall{0%{transform:translateY(-80px) translateX(0) rotate(0);opacity:0}10%{opacity:1}50%{transform:translateY(55vh) translateX(var(--drift)) rotate(180deg)}100%{transform:translateY(115vh) translateX(calc(var(--drift)*-1)) rotate(360deg);opacity:.2}}.rainDrop{top:-30px;width:2px;height:18px;background:rgba(180,220,255,.7);animation:rain .7s linear forwards}@keyframes rain{to{transform:translate(60px,115vh);opacity:0}}.snowflake{top:-30px;font-size:16px;animation:snow 6s linear forwards}@keyframes snow{to{transform:translate(60px,115vh) rotate(360deg);opacity:.2}}#arrival{display:none;font-size:clamp(2rem,6vw,4rem);font-weight:bold;animation:pulse 1.5s infinite alternate}@keyframes pulse{from{transform:scale(1);opacity:.75}to{transform:scale(1.05);opacity:1}}@media(max-width:750px){.countdown{grid-template-columns:repeat(2,1fr)}.infoGrid{grid-template-columns:repeat(2,1fr)}.container{padding:32px 18px}}@media(max-width:460px){.infoGrid{grid-template-columns:1fr}}
 </style>
 </head>
-
 <body>
-
+<div id="sunGlow"></div>
 <div class="container">
-
-    <!-- Loading -->
-    <section id="loadingScreen">
-
-        <h1>🍂 AUTUMN</h1>
-
-        <div class="subtitle">
-            Preparing the Autumn experience...
-        </div>
-
-        <div class="progress">
-            <div id="progressBar" class="progressBar"></div>
-        </div>
-
-        <div id="loadingText">
-            Loading 0%
-        </div>
-
-    </section>
-
-
-    <!-- Countdown -->
-    <section id="countdownScreen">
-
-        <h1>🍁 AUTUMN COUNTDOWN</h1>
-
-        <div class="subtitle">
-            The Autumn release is approaching
-        </div>
-
-        <div class="date">
-            September 23, 2026
-        </div>
-
-        <div class="countdown">
-
-            <div class="unit">
-                <div id="days" class="number">00</div>
-                <div class="label">Days</div>
-            </div>
-
-            <div class="unit">
-                <div id="hours" class="number">00</div>
-                <div class="label">Hours</div>
-            </div>
-
-            <div class="unit">
-                <div id="minutes" class="number">00</div>
-                <div class="label">Minutes</div>
-            </div>
-
-            <div class="unit">
-                <div id="seconds" class="number">00</div>
-                <div class="label">Seconds</div>
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- Arrival -->
-    <div id="arrival">
-        🍂 AUTUMN HAS ARRIVED! 🍁
-    </div>
-
+<section id="loadingScreen"><h1>🍂 AUTUMN</h1><div class="subtitle">Preparing your realistic Autumn experience...</div><div class="progress"><div id="progressBar" class="progressBar"></div></div><div id="loadingText">Loading 0%</div></section>
+<section id="countdownScreen">
+<h1>🍁 AUTUMN COUNTDOWN</h1>
+<div class="subtitle">A live experience powered by time, weather, light and atmosphere</div>
+<div class="date">September 23, 2026</div>
+<div class="countdown">
+<div class="unit"><div id="days" class="number">00</div><div class="label">Days</div></div>
+<div class="unit"><div id="hours" class="number">00</div><div class="label">Hours</div></div>
+<div class="unit"><div id="minutes" class="number">00</div><div class="label">Minutes</div></div>
+<div class="unit"><div id="seconds" class="number">00</div><div class="label">Seconds</div></div>
 </div>
-
-
+<div class="infoGrid">
+<div class="infoCard"><div class="infoIcon">🕒</div><div class="infoTitle">Local Time</div><div id="clock" class="infoValue">Loading...</div></div>
+<div class="infoCard"><div class="infoIcon">📍</div><div class="infoTitle">Your Location</div><div id="location" class="infoValue">Loading...</div></div>
+<div class="infoCard"><div class="infoIcon">🌐</div><div class="infoTitle">Public IP</div><div id="ipAddress" class="infoValue">Loading...</div></div>
+<div class="infoCard"><div id="weatherIcon" class="infoIcon">🌤️</div><div class="infoTitle">Weather</div><div id="weather" class="infoValue">Loading...</div></div>
+<div class="infoCard"><div class="infoIcon">🌡️</div><div class="infoTitle">Temperature</div><div id="temperature" class="infoValue">Loading...</div></div>
+<div class="infoCard"><div class="infoIcon">🌬️</div><div class="infoTitle">Wind</div><div id="wind" class="infoValue">Loading...</div></div>
+<div class="infoCard"><div class="infoIcon">☀️</div><div class="infoTitle">Sunshine</div><div id="sunshine" class="infoValue">Loading...</div></div>
+<div class="infoCard"><div class="infoIcon">🌅</div><div class="infoTitle">Sunrise</div><div id="sunrise" class="infoValue">Loading...</div></div>
+<div class="infoCard"><div class="infoIcon">🌇</div><div class="infoTitle">Sunset</div><div id="sunset" class="infoValue">Loading...</div></div>
+</div>
+<div class="musicBox"><p>🎵 Autumn Background Music</p><audio controls loop><source src="music.mp3" type="audio/mpeg">Your browser does not support audio.</audio></div>
+<div class="credits"><div class="creditLine">🍂 REALISTIC AUTUMN EXPERIENCE 🍁</div><div class="updatedBy">Fully Updated by <strong>Adrnikipad</strong></div></div>
+</section>
+<div id="arrival">🍂 AUTUMN HAS ARRIVED! 🍁</div>
+</div>
 <script>
-
-const progressBar = document.getElementById("progressBar");
-const loadingText = document.getElementById("loadingText");
-
-const loadingScreen = document.getElementById("loadingScreen");
-const countdownScreen = document.getElementById("countdownScreen");
-const arrival = document.getElementById("arrival");
-
-
-// -------------------------
-// Loading 0% → 100%
-// -------------------------
-
-let progress = 0;
-
-const loading = setInterval(() => {
-
-    progress++;
-
-    progressBar.style.width = progress + "%";
-    loadingText.textContent = "Loading " + progress + "%";
-
-    if (progress >= 100) {
-
-        clearInterval(loading);
-
-        setTimeout(() => {
-
-            loadingScreen.style.display = "none";
-            countdownScreen.style.display = "block";
-
-        }, 700);
-    }
-
-}, 35);
-
-
-// -------------------------
-// September 1 Countdown
-// -------------------------
-
-const targetDate = new Date("September 1, 2026 00:00:00").getTime();
-
-function updateCountdown() {
-
-    const now = new Date().getTime();
-
-    let distance = targetDate - now;
-
-    if (distance <= 0) {
-
-        countdownScreen.style.display = "none";
-        arrival.style.display = "block";
-
-        return;
-    }
-
-    const days = Math.floor(
-        distance / (1000 * 60 * 60 * 24)
-    );
-
-    const hours = Math.floor(
-        (distance % (1000 * 60 * 60 * 24)) /
-        (1000 * 60 * 60)
-    );
-
-    const minutes = Math.floor(
-        (distance % (1000 * 60 * 60)) /
-        (1000 * 60)
-    );
-
-    const seconds = Math.floor(
-        (distance % (1000 * 60)) /
-        1000
-    );
-
-    document.getElementById("days").textContent =
-        String(days).padStart(2, "0");
-
-    document.getElementById("hours").textContent =
-        String(hours).padStart(2, "0");
-
-    document.getElementById("minutes").textContent =
-        String(minutes).padStart(2, "0");
-
-    document.getElementById("seconds").textContent =
-        String(seconds).padStart(2, "0");
-}
-
-updateCountdown();
-
-setInterval(updateCountdown, 1000);
-
-
-// -------------------------
-// Falling Autumn Leaves
-// -------------------------
-
-const leaves = ["🍂", "🍁", "🍃"];
-
-function createLeaf() {
-
-    const leaf = document.createElement("div");
-
-    leaf.className = "leaf";
-
-    leaf.textContent =
-        leaves[Math.floor(Math.random() * leaves.length)];
-
-    leaf.style.left =
-        Math.random() * 100 + "vw";
-
-    leaf.style.fontSize =
-        (18 + Math.random() * 28) + "px";
-
-    leaf.style.animationDuration =
-        (5 + Math.random() * 7) + "s";
-
-    leaf.style.animationDelay =
-        (Math.random() * 2) + "s";
-
-    document.body.appendChild(leaf);
-
-    setTimeout(() => {
-        leaf.remove();
-    }, 14000);
-}
-
-setInterval(createLeaf, 300);
-
+const $=id=>document.getElementById(id);let p=0,weatherCode=0,windSpeed=0,isDay=1;
+const load=setInterval(()=>{p++;$("progressBar").style.width=p+"%";$("loadingText").textContent="Loading "+p+"%";if(p>=100){clearInterval(load);setTimeout(()=>{$("loadingScreen").style.display="none";$("countdownScreen").style.display="block"},700)}},35);
+function clock(){$("clock").textContent=new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit",second:"2-digit"})}clock();setInterval(clock,1000);
+const target=new Date("September 23, 2026 00:00:00").getTime();
+function countdown(){let d=target-Date.now();if(d<=0){$("countdownScreen").style.display="none";$("arrival").style.display="block";return}$("days").textContent=String(Math.floor(d/86400000)).padStart(2,"0");$("hours").textContent=String(Math.floor(d%86400000/3600000)).padStart(2,"0");$("minutes").textContent=String(Math.floor(d%3600000/60000)).padStart(2,"0");$("seconds").textContent=String(Math.floor(d%60000/1000)).padStart(2,"0")}countdown();setInterval(countdown,1000);
+function desc(c){return ({0:"Clear Sky",1:"Mostly Clear",2:"Partly Cloudy",3:"Overcast",45:"Foggy",48:"Foggy",51:"Light Drizzle",53:"Drizzle",55:"Heavy Drizzle",61:"Light Rain",63:"Rain",65:"Heavy Rain",71:"Light Snow",73:"Snow",75:"Heavy Snow",80:"Rain Showers",81:"Rain Showers",82:"Heavy Showers",95:"Thunderstorm"})[c]||"Unknown"}
+function icon(c,d){if(c===0)return d?"☀️":"🌙";if(c<=2)return d?"🌤️":"☁️";if(c===3)return"☁️";if(c<=48)return"🌫️";if(c<=65)return"🌧️";if(c<=77)return"❄️";if(c<=82)return"🌦️";return"⛈️"}
+async function live(){try{let ip=await(await fetch("https://ipapi.co/json/")).json();$("ipAddress").textContent=ip.ip||"Unavailable";$("location").textContent=`${ip.city||"Unknown"}, ${ip.country_name||"Unknown"}`;if(ip.latitude&&ip.longitude){let u="https://api.open-meteo.com/v1/forecast?latitude="+ip.latitude+"&longitude="+ip.longitude+"&current=temperature_2m,weather_code,is_day,wind_speed_10m&daily=sunrise,sunset&timezone=auto";let data=await(await fetch(u)).json(),c=data.current;weatherCode=c.weather_code;windSpeed=c.wind_speed_10m;isDay=c.is_day;$("temperature").textContent=Math.round(c.temperature_2m)+"°C";$("weather").textContent=desc(weatherCode);$("weatherIcon").textContent=icon(weatherCode,isDay);$("wind").textContent=Math.round(windSpeed)+" km/h";$("sunshine").textContent=isDay?(new Date().getHours()>=17?"🌇 Golden Hour":"☀️ Daylight"):"🌙 Night";$("sunrise").textContent=new Date(data.daily.sunrise[0]).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});$("sunset").textContent=new Date(data.daily.sunset[0]).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});document.body.classList.toggle("night",!isDay)}}catch(e){$("location").textContent="Unavailable";$("ipAddress").textContent="Unavailable";$("weather").textContent="Unavailable"}}live();setInterval(live,900000);
+const leaves=["🍂","🍁","🍃"];function leaf(){let x=document.createElement("div");x.className="leaf";x.textContent=leaves[Math.floor(Math.random()*leaves.length)];x.style.left=Math.random()*100+"vw";x.style.fontSize=18+Math.random()*30+"px";x.style.setProperty("--drift",(Math.max(35,windSpeed*7)*(Math.random()>.5?1:-1))+"px");x.style.animationDuration=Math.max(3,9-windSpeed*.08+Math.random()*4)+"s";document.body.appendChild(x);setTimeout(()=>x.remove(),15000)}function rain(){if(!((weatherCode>=51&&weatherCode<=65)||(weatherCode>=80&&weatherCode<=82)))return;let x=document.createElement("div");x.className="rainDrop";x.style.left=Math.random()*100+"vw";document.body.appendChild(x);setTimeout(()=>x.remove(),1000)}function snow(){if(!(weatherCode>=71&&weatherCode<=77))return;let x=document.createElement("div");x.className="snowflake";x.textContent="❄";x.style.left=Math.random()*100+"vw";document.body.appendChild(x);setTimeout(()=>x.remove(),7000)}setInterval(leaf,450);setInterval(rain,90);setInterval(snow,350);
 </script>
-
 </body>
 </html>
